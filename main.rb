@@ -50,11 +50,15 @@ end
 # A System has many Particles, and is attached to an integrator
 class Gravy::System < Array
   def initialize(opts={})
-    @integrator = opts[:integrator].new(opts[:steps], opts[:timestep])
+    @integrator = opts.delete(:integrator).new(opts)
   end
 
   def run!(*particles)
     @integrator.start(particles)
+  end
+
+  def method_missing(name, *args)
+    @integrator.send(name, *args)
   end
 end
 
@@ -63,9 +67,10 @@ end
 module Gravy::Integrators
   class Base 
     attr_accessor :current_step, :num_steps, :timestep, :particles
-    def initialize(num_steps, timestep)
-      @num_steps = num_steps
-      @timestep = timestep
+    def initialize(opts={})
+      @num_steps = opts[:num_steps]
+      @timestep = opts[:timestep]
+      @save_steps = opts[:save_steps] || false
       @current_step = 0
       puts "Integrating using the '#{self.class}' integrator..."
       puts "Will be computing #{@num_steps} steps forward ..."
@@ -76,7 +81,7 @@ module Gravy::Integrators
       @particles = particles
       puts "This system contains #{@particles.size} particles"
       puts "INITIAL STATE: "; print_state; puts "-------------"
-      (1..num_steps).each do |step|
+      (1..@num_steps).each do |step|
         puts "STEP #{step} | DT #{@timestep}"
         integrate! 
         increase_step!
@@ -85,8 +90,8 @@ module Gravy::Integrators
       end
     end
 
-    def print_state 
-      @particles.each{|p| puts p}
+    def print_state(particles=@particles) 
+      particles.each{|p| puts p}
     end
 
     def increase_step!
@@ -122,7 +127,7 @@ module Gravy::Integrators
 end
 
 system = Gravy::System.new(:integrator => Gravy::Integrators::Leapfrog,
-                           :steps => ARGV[0] || 10,
+                           :num_steps => ARGV[0] || 10,
                            :timestep => ARGV[1] || 1.0)
 system.run!(
   Gravy::Particle([-10, -10, 0]),
