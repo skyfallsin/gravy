@@ -10,12 +10,28 @@ require 'gravy'
 
 # A System has many Particles, and is attached to an integrator
 class Gravy::System < Array
+  attr_accessor :particles
   def initialize(opts={})
     @integrator = opts.delete(:integrator).new(opts)
   end
 
   def run!(*particles)
-    @integrator.start(particles)
+    @particles = particles
+    @initial_energy = kinetic_energy + potential_energy
+    puts "INITIAL ENERGY: #{@initial_energy}"
+    @integrator.start(@particles)
+    @final_energy = kinetic_energy + potential_energy
+    puts "FINAL ENERGY: #{@final_energy}"
+    puts "ENERGY RETAINED: #{((@initial_energy/@final_energy)*100).to_i}%"
+  end
+
+  def kinetic_energy
+    @particles.inject(0){|energy, p| energy += p.kinetic_energy} 
+  end
+
+  def potential_energy
+    # divide by two so you don't count paired systems twice
+    @particles.inject(0){|energy, p| energy += p.potential_energy(self)}/2.0 
   end
 
   def method_missing(name, *args)

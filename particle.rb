@@ -21,6 +21,18 @@ module Gravy
     def vy; @velocity[1] end
     def vz; @velocity[2] end
 
+    def kinetic_energy
+      0.5 * @mass * (@velocity * @velocity) 
+    end
+
+    # potential energy depends on all of the other particles in the system
+    def potential_energy(system)
+      system.particles.except(self).inject(0){|energy, p|
+        r = p.position - @position
+        energy += -@mass*p.mass/Math.sqrt(r*r)
+      }
+    end
+
     def inspect
       "#{pid}-#{@mass}-[#{x},#{y},#{z}]-[#{vx},#{vy},#{vz}]"
     end
