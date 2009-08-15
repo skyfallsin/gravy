@@ -6,7 +6,7 @@ module Gravy
     def initialize(position, velocity)
       @position = NVector[*position.collect{|x| x.to_f}] 
       @velocity = NVector[*velocity.collect{|x| x.to_f}]
-      @mass = 20.0
+      @mass = rand(200).to_f 
     end
 
     def pid

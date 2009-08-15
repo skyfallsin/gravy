@@ -22,7 +22,7 @@ class Gravy::System < Array
     @integrator.start(@particles)
     @final_energy = kinetic_energy + potential_energy
     puts "FINAL ENERGY: #{@final_energy}"
-    puts "ENERGY RETAINED: #{((@initial_energy/@final_energy)*100).to_i}%"
+    puts "ENERGY RETAINED: #{sprintf("%0.2f", (@initial_energy/@final_energy)*100.0)}%"
   end
 
   def kinetic_energy
