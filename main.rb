@@ -99,10 +99,8 @@ module Gravy::Integrators
     end
 
     def acceleration(this_particle)
-#      puts "Computing acceleration for particle #{this_particle}..."
       acc = NVector[0,0,0]
       @particles.except(this_particle).each{|op|
-#        puts "... with particle #{op}"
         r = op.position - this_particle.position
         r2 = r * r
         r3 = r2 * Math.sqrt(r2)
