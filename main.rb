@@ -76,14 +76,12 @@ module Gravy::Integrators
     end
 
     def acceleration(this_particle)
-      acc = NVector[0,0,0]
-      @particles.except(this_particle).each{|op|
+      @particles.except(this_particle).inject(NVector[0,0,0]){|acc, op|
         r = op.position - this_particle.position
         r2 = r * r
         r3 = r2 * Math.sqrt(r2)
         acc += r * (op.mass/r3)
       } 
-      return acc
     end
   end
   
