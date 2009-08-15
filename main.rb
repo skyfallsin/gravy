@@ -2,50 +2,11 @@ require 'rubygems'
 require 'narray'
 require 'md5'
 
+require 'gravy'
+
 # Gravy
 # (c) Pradeep Elankumaran, 2009
 # pronounced "Grah-vy"
-module Gravy
-  VERSION = 0.1
-end
-
-class Array
-  def except(elem)
-    self - [elem]
-  end
-end
-
-# Particles are the smallest elements of our computation
-class Gravy::Particle
-  attr_accessor :position, :velocity, :mass
-  def initialize(position, velocity)
-    @position = NVector[*position.collect{|x| x.to_f}] 
-    @velocity = NVector[*velocity.collect{|x| x.to_f}]
-    @mass = 20.0
-  end
-
-  def pid
-    @pid ||= MD5.hexdigest("#{@mass}#{object_id}")[0..1]
-  end
-
-  def x; @position[0] end
-  def y; @position[1] end
-  def z; @position[2] end
-  
-  def vx; @velocity[0] end
-  def vy; @velocity[1] end
-  def vz; @velocity[2] end
-
-  def inspect
-    "#{pid}-#{@mass}-[#{x},#{y},#{z}]-[#{vx},#{vy},#{vz}]"
-  end
-  alias :to_s :inspect
-end
-
-def Gravy::Particle(position, velocity=[rand(10),rand(20),0])
-  Gravy::Particle.new(position, velocity)
-end
-
 
 # A System has many Particles, and is attached to an integrator
 class Gravy::System < Array
