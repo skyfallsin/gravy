@@ -7,13 +7,16 @@ module Gravy
     class OpenGL
       include Gl, Glu, Glut
 
+      @@rotate = 0
+
       @@display = Proc.new do
         glClear(GL_COLOR_BUFFER_BIT)
         glColor(1.0, 1.0, 1.0)
 
         glPushMatrix
+	      glRotate(@@rotate, 0.0, 1.0, 0.0)
         glColor(0.2, 0.2, 1.0)
-        glutSolidSphere(1.0, 30.0, 16)
+        glutSolidSphere(3.0, 30.0, 16)
         glTranslate(-60.0, -60.0, 0.0)
         glutSolidSphere(1.0, 30.0, 16)
         glPopMatrix
@@ -32,6 +35,18 @@ module Gravy
       	gluLookAt(0.0, 0.0, 200.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
       end
 
+      @@keyboard_event = Proc.new do |key, x, y|
+        case key
+          when ?r
+            @@rotate += 10.0
+          when ?R
+            @@rotate -= 10.0 
+          when ?e
+            exit(0)
+        end
+        glutPostRedisplay
+      end
+
       def initialize(height, width)
         glutInit
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
@@ -44,6 +59,7 @@ module Gravy
 
         glutDisplayFunc @@display
         glutReshapeFunc @@reshape
+        glutKeyboardFunc @@keyboard_event
         glutMainLoop
       end
 
@@ -51,5 +67,5 @@ module Gravy
   end
 end
 
-Gravy::Render::OpenGL.new(600, 500)
+Gravy::Render::OpenGL.new(800, 600)
 
