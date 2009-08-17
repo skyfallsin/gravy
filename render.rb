@@ -70,7 +70,7 @@ $reshape = Proc.new do |width, height|
   gluPerspective(60.0, width.to_f/height.to_f, 1.0, 1000.0)
   glMatrixMode(GL_MODELVIEW)
   glLoadIdentity
-  gluLookAt(0.0, 0.0, 200.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+  gluLookAt(0.0, 0.0, 100.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
 end
 
 $keyboard_event = Proc.new do |key, x, y|
