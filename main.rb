@@ -1,7 +1,3 @@
-require 'rubygems'
-require 'narray'
-require 'md5'
-
 require 'gravy'
 
 # Gravy

@@ -1,3 +1,7 @@
+require 'rubygems'
+require 'narray'
+require 'md5'
+
 module Gravy
   VERSION = 0.1
 end

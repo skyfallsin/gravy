@@ -3,10 +3,10 @@
 module Gravy
   class Particle
     attr_accessor :position, :velocity, :mass
-    def initialize(position, velocity)
+    def initialize(position, velocity, mass = rand(200).to_f)
       @position = NVector[*position.collect{|x| x.to_f}] 
       @velocity = NVector[*velocity.collect{|x| x.to_f}]
-      @mass = rand(200).to_f 
+      @mass = mass 
     end
 
     def pid
